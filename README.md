@@ -16,14 +16,21 @@ Default implementation from hibernate is costly and it does a lot of things and 
 
 ## Usage
 
-This property helps to instantiate our library.
-"hibernate.stats.factory", new MinimalStatisticsFactory());
-
 Configurable Properties.
 1. "min.hibernate.stats.logging.enabled" - True/False (Enable logging)
 2. "min.hibernate.stats.metrics.publish" - True/False (Enable storing in-memory and enabling it to be available via MetricsPublisher class)
 3. "min.hibernate.stats.loggers" - QUERY_EXECUTION_TIME (Enables logging of query and the execution time)
 4. "min.hibernate.stats.query.logging.min.executionTime.millis" - 250 (Minimum Milliseconds needed to log the query).
+
+
+### In Hibernate
+
+This property helps to instantiate our library.
+"hibernate.stats.factory", new MinimalStatisticsFactory());
+
+### Without hibernate
+
+Instantiate this "new MinimalStatisticsFactory()" and makes use of Classes in "com.rohith.hibernateminimallogger.loggers" package.
 
 ## Report to graph database or Prometheus
 
