@@ -2,7 +2,8 @@
 
 Library to enable minimal statistical recording of database queries.
 
-##Motivation
+## Motivation
+
 Currently, it is impossible to have just query and the time taken to execute them.
 Default implementation from hibernate is costly and it does a lot of things and not even sure how performant is this in a production system.
 
@@ -13,7 +14,8 @@ Default implementation from hibernate is costly and it does a lot of things and 
 5. Injectable even on non-hibernate or non-spring projects by little tweaks.
 6. Statistics reporting will help the data to be sent to Prometheus or similar databases and create alerts to notify whether there are queries that needs to be improved.
 
-##Usage
+## Usage
+
 This property helps to instantiate our library.
 "hibernate.stats.factory", new MinimalStatisticsFactory());
 
