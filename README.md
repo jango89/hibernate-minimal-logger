@@ -26,7 +26,9 @@ Configurable Properties.
 1. "min.hibernate.stats.logging.enabled" - True/False (Enable logging)
 2. "min.hibernate.stats.metrics.publish" - True/False (Enable storing in-memory and enabling it to be available via MetricsPublisher class)
 3. "min.hibernate.stats.loggers" - QUERY_EXECUTION_TIME (Enables logging of query and the execution time)
-4. "min.hibernate.stats.query.logging.min.executionTime.millis" - 250 (Minimum Milliseconds needed to log the query).
+4. "min.hibernate.stats.query.logging.min.executionTime.millis" - 250 (Minimum Milliseconds needed to report the metric).
+5. "min.hibernate.stats.query.logging.min.rows" - 20 (Minimum number of rows fetched to report the metric).
+
 
 
 ### In Hibernate
