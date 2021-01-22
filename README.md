@@ -14,6 +14,12 @@ Default implementation from hibernate is costly and it does a lot of things and 
 5. Injectable even on non-hibernate or non-spring projects by little tweaks.
 6. Statistics reporting will help the data to be sent to Prometheus or similar databases and create alerts to notify whether there are queries that needs to be improved.
 
+## Sample Use-cases
+
+1. Developer need logs for sql queries with time taken to execute.
+2. Developer need alert from Prometheus if there are queries taking more time than expected.
+3. Developer needs prometheus metrics on how many rows being fetched for select queries.
+
 ## Usage
 
 Configurable Properties.
