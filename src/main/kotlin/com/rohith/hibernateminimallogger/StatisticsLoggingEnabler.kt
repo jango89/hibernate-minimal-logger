@@ -2,6 +2,7 @@ package com.rohith.hibernateminimallogger
 
 import com.rohith.hibernateminimallogger.domain.DataStore
 import com.rohith.hibernateminimallogger.domain.StatisticsLoggerType.QUERY_EXECUTION_TIME
+import com.rohith.hibernateminimallogger.loggers.QueryRowStatisticsLogger
 import com.rohith.hibernateminimallogger.loggers.QueryTimeStatisticsLogger
 import org.hibernate.stat.*
 import org.hibernate.stat.spi.StatisticsImplementor
@@ -15,7 +16,8 @@ class StatisticsLoggingEnabler(private val dataStore: DataStore) : StatisticsImp
     override fun queryExecuted(sql: String, rows: Int, timeInMs: Long) {
 
         if (dataStore.isEnabled(QUERY_EXECUTION_TIME)) {
-            QueryTimeStatisticsLogger().execute(sql, rows, timeInMs, dataStore)
+            QueryTimeStatisticsLogger().execute(sql, timeInMs, dataStore)
+            QueryRowStatisticsLogger().execute(sql, rows, dataStore)
         } else {
             LOGGER.debug("Hibernate-statistics disabled QUERY_EXECUTION_TIME Logger type")
         }

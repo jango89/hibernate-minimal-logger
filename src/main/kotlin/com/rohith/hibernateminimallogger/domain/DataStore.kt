@@ -9,8 +9,9 @@ private val LOGGER: Logger = LoggerFactory.getLogger(DataStore::class.java)
 
 class DataStore(
         private var isLoggingEnabled: Boolean = false,
-        private var canReportMetric: Boolean = false,
-        private var minTimeInMilliSecondToReportMetric: Int = 250,
+        internal var canReportMetric: Boolean = false,
+        internal var minTimeInMilliSecondToReportMetric: Int = 250,
+        internal var minRowsToReportMetric: Int = 20,
         private var enabledLoggers: List<StatisticsLoggerType> = listOf()
 ) {
 
@@ -20,6 +21,7 @@ class DataStore(
             canReportMetric = reportMetricsEnabled(this)
             enabledLoggers = loggersEnabled(this)
             minTimeInMilliSecondToReportMetric = minQueryTimeForQueryExecutionReporting(this)
+            minRowsToReportMetric = minRowsForQueryExecutionReporting(this)
         }
 
         return this
@@ -28,8 +30,6 @@ class DataStore(
     fun isEnabled(loggerType: StatisticsLoggerType) = enabledLoggers.contains(loggerType)
 
     fun eligibleToLog() = isLoggingEnabled
-
-    fun eligibleToReport(timeInMs: Long) = canReportMetric && timeInMs >= minTimeInMilliSecondToReportMetric
 
     private fun loggersEnabled(props: Map<String, Any>): List<StatisticsLoggerType> {
         if (props.containsKey(Constants.LOGGERS)) {
@@ -41,7 +41,7 @@ class DataStore(
                         .also { LOGGER.info("Hibernate metrics loggers enabled={}", it) }
             }
         }
-        return listOf(StatisticsLoggerType.QUERY_EXECUTION_TIME)
+        return listOf(StatisticsLoggerType.QUERY_EXECUTION_TIME, StatisticsLoggerType.QUERY_ROWS_COUNT)
                 .also { LOGGER.info("Hibernate metrics loggers enabled={}", it) }
     }
 
@@ -58,6 +58,11 @@ class DataStore(
     private fun minQueryTimeForQueryExecutionReporting(props: Map<String, Any>): Int =
             props.getOrDefault(Constants.QUERY_MIN_EXECUTION_TIME_IN_MS, 250)
                     .also { LOGGER.info("Hibernate metrics min time for query execution in ms={}", it) }
+                    as Int
+
+    private fun minRowsForQueryExecutionReporting(props: Map<String, Any>): Int =
+            props.getOrDefault(Constants.QUERY_MIN_ROWS, 20)
+                    .also { LOGGER.info("Hibernate metrics min rows for query={}", it) }
                     as Int
 
 }
