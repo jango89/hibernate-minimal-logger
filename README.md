@@ -22,6 +22,15 @@ Default implementation from hibernate is costly and it does a lot of things and 
 
 ## Usage
 
+Dependency available [here](https://mvnrepository.com/artifact/com.github.jango89/hibernate-minimal-logger)
+```
+<dependency>
+  <groupId>com.github.jango89</groupId>
+  <artifactId>hibernate-minimal-logger</artifactId>
+  <version>0.0.2</version>
+</dependency>
+```
+
 Configurable Properties.
 1. "min.hibernate.stats.logging.enabled" - True/False (Enable logging)
 2. "min.hibernate.stats.metrics.publish" - True/False (Enable storing in-memory and enabling it to be available via MetricsPublisher class)
