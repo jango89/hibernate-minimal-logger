@@ -4,7 +4,7 @@ Library to enable minimal statistical recording of database queries.
 
 ## Motivation
 
-Currently, it is impossible to log or record the query and the time taken to execute them.
+Currently, it is impossible to *only* log or record the query and the time taken to execute them. 
 Default implementation from hibernate is costly and it does a lot of things and not even sure how performant is this in a production system.
 
 1. This library helps us to activate only the loggers based on things each individual or team wants.
