@@ -7,10 +7,11 @@ import java.util.concurrent.ThreadPoolExecutor
 import kotlin.random.Random
 
 class QueryRowMetricUpdaterTest {
+
     @Test
     fun shouldUpdateWithRows() {
-        QueryRowMetricUpdater.addToMetric("first", 1000)
-        assertEquals(1000, MetricHolder.queryWithRows["first"])
+        QueryRowMetricUpdater.addToMetric("first_query_row_update", 1000)
+        assertEquals(1000, MetricHolder.queryWithRows["first_query_row_update"])
     }
 
     @Test
@@ -24,11 +25,11 @@ class QueryRowMetricUpdaterTest {
             service.submit {
                 val intVal = Random.nextInt(1000, 1010)
                 randomList.add(intVal)
-                QueryRowMetricUpdater.addToMetric("second", intVal)
+                QueryRowMetricUpdater.addToMetric("second_query_row_update", intVal)
             }
         }
         Thread.sleep(1000)
 
-        assertEquals(randomList.maxOrNull(), MetricHolder.queryWithRows["second"])
+        assertEquals(randomList.maxOrNull(), MetricHolder.queryWithRows["second_query_row_update"])
     }
 }

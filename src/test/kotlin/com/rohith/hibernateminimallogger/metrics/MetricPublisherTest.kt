@@ -7,13 +7,13 @@ class MetricPublisherTest {
 
     @Test
     fun shouldPublishMetric_whenQueryWithExecutionTimeIsPresent() {
-        MetricHolder.queryWithExecutionTime["first"] = 10
-        assertEquals(10L, MetricPublisher.queryWithMaxExecutionTime()["first"])
+        MetricHolder.queryWithExecutionTime["first_publish"] = 10
+        assertEquals(10L, MetricPublisher.queryWithMaxExecutionTime()["first_publish"])
     }
 
     @Test
     fun shouldPublishMetric_whenQueryWithRowsIsPresent() {
-        MetricHolder.queryWithRows["second"] = 10
-        assertEquals(10, MetricPublisher.queryWithMaxRows()["second"])
+        MetricHolder.queryWithRows["second_publish"] = 10
+        assertEquals(10, MetricPublisher.queryWithMaxRows()["second_publish"])
     }
 }

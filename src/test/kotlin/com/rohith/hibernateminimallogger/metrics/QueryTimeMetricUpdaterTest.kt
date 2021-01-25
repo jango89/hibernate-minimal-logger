@@ -11,8 +11,8 @@ class QueryTimeMetricUpdaterTest {
 
     @Test
     fun shouldUpdateWithTimeTaken() {
-        QueryTimeMetricUpdater.addToMetric("first", 1000)
-        assertEquals(1000L, MetricHolder.queryWithExecutionTime["first"])
+        QueryTimeMetricUpdater.addToMetric("first_query_time_update", 1000)
+        assertEquals(1000L, MetricHolder.queryWithExecutionTime["first_query_time_update"])
     }
 
     @Test
@@ -26,12 +26,12 @@ class QueryTimeMetricUpdaterTest {
             service.submit {
                 val longVal = Random.nextLong(1000, 1010)
                 randomList.add(longVal)
-                QueryTimeMetricUpdater.addToMetric("second", longVal)
+                QueryTimeMetricUpdater.addToMetric("second_query_row_update", longVal)
             }
         }
         Thread.sleep(1000)
 
-        assertEquals(randomList.maxOrNull(), MetricHolder.queryWithExecutionTime["second"])
+        assertEquals(randomList.maxOrNull(), MetricHolder.queryWithExecutionTime["second_query_row_update"])
     }
 
 }

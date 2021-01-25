@@ -1,8 +1,8 @@
 package com.rohith.hibernateminimallogger.metrics
 
-import com.rohith.hibernateminimallogger.metrics.MetricHolder.queryWithExecutionTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.locks.ReentrantReadWriteLock
 
 private val LOGGER: Logger = LoggerFactory.getLogger(QueryTimeMetricUpdater::class.java)
@@ -15,14 +15,14 @@ object QueryTimeMetricUpdater {
 
         val writeLock = lockForQueryExecutionTime.writeLock()
         try {
-            writeLock.lock()
+            if (writeLock.tryLock(10, MILLISECONDS)) {
+                val updatedTimeInMs: Long? = MetricHolder.queryWithExecutionTime.merge(sql, timeInMs) { oldValue, newValue ->
+                    if (newValue > oldValue) newValue else oldValue
+                }
+                MetricHolder.queryWithExecutionTime[sql] = updatedTimeInMs
 
-            val updatedTimeInMs: Long? = queryWithExecutionTime.merge(sql, timeInMs) { oldValue, newValue ->
-                if (newValue > oldValue) newValue else oldValue
+                LOGGER.debug("Sql updated with execution time={}, against timeMs inserted={}", updatedTimeInMs, timeInMs)
             }
-            queryWithExecutionTime[sql] = updatedTimeInMs
-
-            LOGGER.debug("Sql updated with execution time={}, against timeMs inserted={}", updatedTimeInMs, timeInMs)
 
         } finally {
             writeLock.unlock()
