@@ -1,26 +1,16 @@
 package com.rohith.hibernateminimallogger
 
 import com.rohith.hibernateminimallogger.domain.DataStore
-import com.rohith.hibernateminimallogger.domain.StatisticsLoggerType.QUERY_EXECUTION_TIME
 import com.rohith.hibernateminimallogger.loggers.QueryRowStatisticsLogger
 import com.rohith.hibernateminimallogger.loggers.QueryTimeStatisticsLogger
 import org.hibernate.stat.*
 import org.hibernate.stat.spi.StatisticsImplementor
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
-private val LOGGER: Logger = LoggerFactory.getLogger(StatisticsLoggingEnabler::class.java)
 
 class StatisticsLoggingEnabler(private val dataStore: DataStore) : StatisticsImplementor {
 
     override fun queryExecuted(sql: String, rows: Int, timeInMs: Long) {
-
-        if (dataStore.isEnabled(QUERY_EXECUTION_TIME)) {
-            QueryTimeStatisticsLogger().execute(sql, timeInMs, dataStore)
-            QueryRowStatisticsLogger().execute(sql, rows, dataStore)
-        } else {
-            LOGGER.debug("Hibernate-statistics disabled QUERY_EXECUTION_TIME Logger type")
-        }
+        QueryTimeStatisticsLogger().execute(sql, timeInMs, dataStore)
+        QueryRowStatisticsLogger().execute(sql, rows, dataStore)
     }
 
     override fun isStatisticsEnabled(): Boolean {

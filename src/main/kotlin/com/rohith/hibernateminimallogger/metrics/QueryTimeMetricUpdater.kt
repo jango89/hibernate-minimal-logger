@@ -3,29 +3,29 @@ package com.rohith.hibernateminimallogger.metrics
 import com.rohith.hibernateminimallogger.metrics.MetricHolder.queryWithExecutionTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.locks.ReentrantLock
+import java.util.concurrent.locks.ReentrantReadWriteLock
 
 private val LOGGER: Logger = LoggerFactory.getLogger(QueryTimeMetricUpdater::class.java)
 
 object QueryTimeMetricUpdater {
 
-    private val lockForQueryExecutionTime = ReentrantLock()
+    private val lockForQueryExecutionTime = ReentrantReadWriteLock()
 
     fun addToMetric(sql: String, timeInMs: Long) {
 
-        if (lockForQueryExecutionTime.tryLock() || lockForQueryExecutionTime.tryLock(3, TimeUnit.MILLISECONDS)) {
-            try {
-                lockForQueryExecutionTime.lock()
+        val writeLock = lockForQueryExecutionTime.writeLock()
+        try {
+            writeLock.lock()
 
-                val value: Long? = queryWithExecutionTime.merge(sql, timeInMs) { oldValue, newValue ->
-                    if (newValue > oldValue) newValue else oldValue
-                }
-                queryWithExecutionTime[sql] = value
-                LOGGER.debug("Sql updated with execution time={}", value)
-            } finally {
-                lockForQueryExecutionTime.unlock()
+            val updatedTimeInMs: Long? = queryWithExecutionTime.merge(sql, timeInMs) { oldValue, newValue ->
+                if (newValue > oldValue) newValue else oldValue
             }
+            queryWithExecutionTime[sql] = updatedTimeInMs
+
+            LOGGER.debug("Sql updated with execution time={}, against timeMs inserted={}", updatedTimeInMs, timeInMs)
+
+        } finally {
+            writeLock.unlock()
         }
     }
 }

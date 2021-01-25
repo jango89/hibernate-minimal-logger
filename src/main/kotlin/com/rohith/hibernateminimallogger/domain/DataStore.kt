@@ -1,6 +1,9 @@
 package com.rohith.hibernateminimallogger.domain
 
+import com.rohith.hibernateminimallogger.domain.StatisticsLoggerType.QUERY_EXECUTION_TIME
+import com.rohith.hibernateminimallogger.domain.StatisticsLoggerType.QUERY_ROWS_COUNT
 import com.rohith.hibernateminimallogger.properties.Constants
+import com.rohith.hibernateminimallogger.properties.Constants.LOGGERS
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -12,7 +15,7 @@ class DataStore(
         internal var canReportMetric: Boolean = false,
         internal var minTimeInMilliSecondToReportMetric: Int = 250,
         internal var minRowsToReportMetric: Int = 20,
-        private var enabledLoggers: List<StatisticsLoggerType> = listOf()
+        private var enabledLoggers: List<StatisticsLoggerType> = listOf(QUERY_EXECUTION_TIME, QUERY_ROWS_COUNT)
 ) {
 
     fun reInitialize(props: Map<String, Any>): DataStore {
@@ -32,16 +35,16 @@ class DataStore(
     fun eligibleToLog() = isLoggingEnabled
 
     private fun loggersEnabled(props: Map<String, Any>): List<StatisticsLoggerType> {
-        if (props.containsKey(Constants.LOGGERS)) {
+        if (props.containsKey(LOGGERS)) {
 
-            val loggers = props[Constants.LOGGERS].toString().trim()
+            val loggers = props[LOGGERS].toString().trim()
             if (loggers.isNotEmpty()) {
                 val enabledLoggers = loggers.split(",")
                 return enabledLoggers.map { StatisticsLoggerType.valueOf(it.trim()) }
                         .also { LOGGER.info("Hibernate metrics loggers enabled={}", it) }
             }
         }
-        return listOf(StatisticsLoggerType.QUERY_EXECUTION_TIME, StatisticsLoggerType.QUERY_ROWS_COUNT)
+        return listOf(QUERY_EXECUTION_TIME, QUERY_ROWS_COUNT)
                 .also { LOGGER.info("Hibernate metrics loggers enabled={}", it) }
     }
 

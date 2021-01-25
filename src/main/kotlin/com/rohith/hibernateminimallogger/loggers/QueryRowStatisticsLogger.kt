@@ -1,6 +1,7 @@
 package com.rohith.hibernateminimallogger.loggers
 
 import com.rohith.hibernateminimallogger.domain.DataStore
+import com.rohith.hibernateminimallogger.domain.StatisticsLoggerType.QUERY_ROWS_COUNT
 import com.rohith.hibernateminimallogger.metrics.QueryRowMetricUpdater
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -10,11 +11,16 @@ private val LOGGER: Logger = LoggerFactory.getLogger(QueryRowStatisticsLogger::c
 internal class QueryRowStatisticsLogger {
 
     fun execute(sql: String, rows: Int, dataStore: DataStore) {
-        try {
-            log(dataStore, sql, rows)
-            reportMetric(dataStore, rows, sql)
-        } catch (ex: Exception) {
-            LOGGER.warn("Metric cannot be reported", ex)
+
+        if (dataStore.isEnabled(QUERY_ROWS_COUNT)) {
+            kotlin.runCatching {
+                log(dataStore, sql, rows)
+                reportMetric(dataStore, rows, sql)
+            }.onFailure {
+                LOGGER.error("Logging query rows failed {} ", it)
+            }
+        } else {
+            LOGGER.debug("QUERY_ROWS_COUNT logger not enabled")
         }
     }
 
@@ -29,10 +35,17 @@ internal class QueryRowStatisticsLogger {
     private fun reportMetric(dataStore: DataStore, rows: Int, sql: String) {
         if (eligibleToReport(dataStore, rows)) {
             QueryRowMetricUpdater.addToMetric(sql, rows)
-        } else {
-            LOGGER.debug("Hibernate-statistics reporting metric setting disabled ")
         }
     }
 
-    private fun eligibleToReport(dataStore: DataStore, rows: Int) = dataStore.canReportMetric && rows > dataStore.minRowsToReportMetric
+    private fun eligibleToReport(dataStore: DataStore, rows: Int): Boolean =
+            (dataStore.canReportMetric).also { log(it, "Report flag is set to false") }
+                    && (rows > dataStore.minRowsToReportMetric).also { log(it, "Min-rows expectation failed") }
+
+    private fun log(it: Boolean, message: String) {
+        if (!it) {
+            LOGGER.debug("Hibernate-statistics {}", message)
+        }
+    }
+
 }
