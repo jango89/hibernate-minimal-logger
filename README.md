@@ -27,7 +27,7 @@ Dependency available [here](https://mvnrepository.com/artifact/com.github.jango8
 <dependency>
   <groupId>com.github.jango89</groupId>
   <artifactId>hibernate-minimal-logger</artifactId>
-  <version>0.0.4</version>
+  <version>0.0.5</version>
 </dependency>
 ```
 
