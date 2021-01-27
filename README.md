@@ -53,3 +53,8 @@ Instantiate this "new MinimalStatisticsFactory()" and makes use of Classes in "c
 
 1. Enable saving data by enabling "min.hibernate.stats.metrics.publish" property via system property.
 2. And scrape information from [methods here](https://github.com/jango89/hibernate-minimal-logger/blob/main/src/main/kotlin/com/rohith/hibernateminimallogger/metrics/MetricPublisher.kt) based on necessity.
+
+## Integration Docs
+
+[Available here](https://github.com/jango89/hibernate-minimal-logger/wiki)
+
