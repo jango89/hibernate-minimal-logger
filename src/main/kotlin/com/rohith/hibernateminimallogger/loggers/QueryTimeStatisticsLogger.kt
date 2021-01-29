@@ -25,10 +25,8 @@ internal class QueryTimeStatisticsLogger {
     }
 
     private fun log(dataStore: DataStore, sql: String, timeInMs: Long) {
-        if (dataStore.eligibleToLog()) {
+        if (eligibleToLog(dataStore, timeInMs)) {
             LOGGER.info("Hibernate-statistics Time taken to execute sql={} is time-ms={}", sql, timeInMs)
-        } else {
-            LOGGER.debug("Hibernate-statistics Logging setting disabled ")
         }
     }
 
@@ -43,6 +41,9 @@ internal class QueryTimeStatisticsLogger {
     private fun eligibleToReport(dataStore: DataStore, timeInMs: Long) =
             dataStore.canReportMetric.also { log(it, "Report flag is set to false") }
                     && (timeInMs >= dataStore.minTimeInMilliSecondToReportMetric).also { log(it, "Min-time expectation failed") }
+
+    private fun eligibleToLog(dataStore: DataStore, timeInMs: Long) =
+            dataStore.eligibleToLog() && (timeInMs >= dataStore.minTimeInMilliSecondToReportMetric)
 
     private fun log(it: Boolean, message: String) {
         if (!it) {

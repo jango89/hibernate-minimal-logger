@@ -25,10 +25,8 @@ internal class QueryRowStatisticsLogger {
     }
 
     private fun log(dataStore: DataStore, sql: String, rows: Int) {
-        if (dataStore.eligibleToLog()) {
+        if (eligibleToLog(dataStore, rows)) {
             LOGGER.info("Hibernate-statistics Rows taken to execute sql={} is rows={}", sql, rows)
-        } else {
-            LOGGER.debug("Hibernate-statistics Logging setting disabled ")
         }
     }
 
@@ -41,6 +39,10 @@ internal class QueryRowStatisticsLogger {
     private fun eligibleToReport(dataStore: DataStore, rows: Int): Boolean =
             (dataStore.canReportMetric).also { log(it, "Report flag is set to false") }
                     && (rows > dataStore.minRowsToReportMetric).also { log(it, "Min-rows expectation failed") }
+
+
+    private fun eligibleToLog(dataStore: DataStore, rows: Int): Boolean =
+            (dataStore.eligibleToLog()) && (rows > dataStore.minRowsToReportMetric)
 
     private fun log(it: Boolean, message: String) {
         if (!it) {
