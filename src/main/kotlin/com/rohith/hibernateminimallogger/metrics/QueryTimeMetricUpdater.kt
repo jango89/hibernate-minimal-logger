@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.locks.ReentrantReadWriteLock
 
 private val LOGGER: Logger = LoggerFactory.getLogger(QueryTimeMetricUpdater::class.java)
+private const val LOCK_IN_MS: Long = 5
 
 object QueryTimeMetricUpdater {
 
@@ -15,8 +16,9 @@ object QueryTimeMetricUpdater {
 
         val writeLock = lockForQueryExecutionTime.writeLock()
         try {
-            if (writeLock.tryLock(10, MILLISECONDS)) {
-                val updatedTimeInMs: Long? = MetricHolder.queryWithExecutionTime.merge(sql, timeInMs) { oldValue, newValue ->
+            if (writeLock.tryLock(LOCK_IN_MS, MILLISECONDS)) {
+                val updatedTimeInMs: Long? = MetricHolder.queryWithExecutionTime.merge(sql, timeInMs)
+                { oldValue, newValue ->
                     if (newValue > oldValue) newValue else oldValue
                 }
                 MetricHolder.queryWithExecutionTime[sql] = updatedTimeInMs

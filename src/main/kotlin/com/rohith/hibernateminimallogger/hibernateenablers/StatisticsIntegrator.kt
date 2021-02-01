@@ -1,4 +1,4 @@
-package com.rohith.hibernateminimallogger
+package com.rohith.hibernateminimallogger.hibernateenablers
 
 import com.rohith.hibernateminimallogger.domain.DataStore
 import com.rohith.hibernateminimallogger.loggers.QueryRowStatisticsLogger
@@ -6,7 +6,7 @@ import com.rohith.hibernateminimallogger.loggers.QueryTimeStatisticsLogger
 import org.hibernate.stat.*
 import org.hibernate.stat.spi.StatisticsImplementor
 
-class StatisticsLoggingEnabler(private val dataStore: DataStore) : StatisticsImplementor {
+internal class StatisticsIntegrator(private val dataStore: DataStore) : StatisticsImplementor {
 
     override fun queryExecuted(sql: String, rows: Int, timeInMs: Long) {
         QueryTimeStatisticsLogger().execute(sql, timeInMs, dataStore)
