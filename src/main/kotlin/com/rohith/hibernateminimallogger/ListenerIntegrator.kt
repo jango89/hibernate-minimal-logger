@@ -1,4 +1,4 @@
-package com.rohith.hibernateminimallogger.hibernateenablers
+package com.rohith.hibernateminimallogger
 
 import com.rohith.hibernateminimallogger.domain.TransactionalLoggingDataStore
 import com.rohith.hibernateminimallogger.listeners.*

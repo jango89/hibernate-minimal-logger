@@ -1,5 +1,6 @@
 package com.rohith.hibernateminimallogger.hibernateenablers
 
+import com.rohith.hibernateminimallogger.ListenerIntegrator
 import com.rohith.hibernateminimallogger.listeners.*
 import org.hibernate.event.service.spi.DuplicationStrategy
 import org.hibernate.event.service.spi.EventListenerGroup

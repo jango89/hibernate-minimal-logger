@@ -64,7 +64,8 @@ However of-course once the metric is reported to prometheus via MetricPublisher,
 
 ###### In Hibernate
 
-
+This property helps to instantiate our library.
+"hibernate.integrator_provider", new ListenerIntegrator(hibernateProperties)
 
 ## Report to graph database or Prometheus
 
