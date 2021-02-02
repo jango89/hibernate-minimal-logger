@@ -58,5 +58,4 @@ class TransactionalLoggingDataStore(
             props.getOrDefault(Constants.INSERT_LISTENERS_ENABLED, false)
                     .also { LOGGER.info("Hibernate metrics create insert listeners enabled={}", it) }
                     as Boolean
-
 }

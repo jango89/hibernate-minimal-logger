@@ -10,7 +10,7 @@ class PreUpdateListener(private val noOfUpdationSamplesPerEntity: Int) : PreUpda
 
     override fun onPreUpdate(event: PreUpdateEvent?): Boolean {
         event?.session?.getEntityName(event?.entity)?.let {
-            SampleUpdater.upsert(
+            SampleUpdater.update(
                     it,
                     noOfUpdationSamplesPerEntity,
                     Scenario.START,

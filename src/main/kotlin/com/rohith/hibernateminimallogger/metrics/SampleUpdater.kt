@@ -11,33 +11,32 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.lang.System.currentTimeMillis
 import java.lang.Thread.currentThread
-import java.lang.ref.WeakReference
 import java.util.*
-import java.util.concurrent.TimeUnit.MILLISECONDS
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantReadWriteLock
 
 private val LOGGER: Logger = LoggerFactory.getLogger(SampleUpdater::class.java)
-private const val LOCK_IN_MS: Long = 2
+private const val LOCK_IN_MS: Long = 5
 
 internal object SampleUpdater {
 
-    private val updateLock = ReentrantReadWriteLock()
-    private val insertLock = ReentrantReadWriteLock()
-    private val deleteLock = ReentrantReadWriteLock()
+    private val updateLock = ReentrantReadWriteLock(true)
+    private val insertLock = ReentrantReadWriteLock(true)
+    private val deleteLock = ReentrantReadWriteLock(true)
 
-    fun upsert(entityName: String, maxNoOfSamplers: Int, scenario: Scenario, transactionEvent: TransactionEvent) =
-            updateMetric(updateLock, entityName, maxNoOfSamplers, scenario, transactionEvent)
+    fun update(entityName: String, maxNoOfSamplers: Int, scenario: Scenario, transactionEvent: TransactionEvent) =
+            record(updateLock, entityName, maxNoOfSamplers, scenario, transactionEvent)
 
     fun delete(entityName: String, maxNoOfSamplers: Int, scenario: Scenario, transactionEvent: TransactionEvent) =
-            updateMetric(deleteLock, entityName, maxNoOfSamplers, scenario, transactionEvent)
+            record(deleteLock, entityName, maxNoOfSamplers, scenario, transactionEvent)
 
     fun insert(entityName: String, maxNoOfSamplers: Int, scenario: Scenario, transactionEvent: TransactionEvent) =
-            updateMetric(insertLock, entityName, maxNoOfSamplers, scenario, transactionEvent)
+            record(insertLock, entityName, maxNoOfSamplers, scenario, transactionEvent)
 
-    private fun updateMetric(lock: ReentrantReadWriteLock, entityName: String, maxNoOfSamplers: Int, scenario: Scenario, transactionEvent: TransactionEvent) {
+    private fun record(lock: ReentrantReadWriteLock, entityName: String, maxNoOfSamplers: Int, scenario: Scenario, transactionEvent: TransactionEvent) {
         val writeLock = lock.writeLock()
         try {
-            if (writeLock.tryLock(LOCK_IN_MS, MILLISECONDS)) {
+            if (writeLock.tryLock(LOCK_IN_MS, TimeUnit.MILLISECONDS)) {
                 addToMetric(entityName, maxNoOfSamplers, scenario, transactionEvent)
             }
         } finally {
@@ -49,26 +48,26 @@ internal object SampleUpdater {
 
         val samples = samples(transactionEvent, entityName)
         if (canAdd(samples, maxNoOfSamplers)) {
-            val timeStats = samples.getOrPut(currentThread().id, { WeakReference(MetricHolder.TimeStats()) })
+            val timeStats = samples.getOrPut(currentThread().id, { MetricHolder.TimeStats() })
             updateTime(scenario, timeStats)
-            LOGGER.debug("Insert sample added for entity={}", entityName)
+            LOGGER.debug("Transaction={} with scenario={} added for entity={}", transactionEvent, scenario, entityName)
         }
     }
 
-    private fun samples(transactionEvent: TransactionEvent, entityName: String): WeakHashMap<Long, WeakReference<MetricHolder.TimeStats>> =
+    private fun samples(transactionEvent: TransactionEvent, entityName: String): WeakHashMap<Long, MetricHolder.TimeStats> =
             when (transactionEvent) {
                 TransactionEvent.INSERT -> insertEntityWithThreadAndTimeReference.getOrPut(entityName, { WeakHashMap() })
                 TransactionEvent.UPDATE -> updateEntityWithThreadAndTimeReference.getOrPut(entityName, { WeakHashMap() })
                 TransactionEvent.DELETE -> deleteEntityWithThreadAndTimeReference.getOrPut(entityName, { WeakHashMap() })
             }
 
-    private fun updateTime(scenario: Scenario, timeStats: WeakReference<MetricHolder.TimeStats>) =
+    private fun updateTime(scenario: Scenario, timeStats: MetricHolder.TimeStats) =
             when (scenario) {
-                START -> timeStats.get()!!.start = currentTimeMillis()
-                FINISH -> timeStats.get()!!.finish = currentTimeMillis()
+                START -> timeStats?.start = currentTimeMillis()
+                FINISH -> timeStats?.finish = currentTimeMillis()
             }
 
-    private fun canAdd(samples: WeakHashMap<Long, WeakReference<MetricHolder.TimeStats>>, maxNoOfSamplers: Int) =
+    private fun canAdd(samples: WeakHashMap<Long, MetricHolder.TimeStats>, maxNoOfSamplers: Int) =
             samples.size < maxNoOfSamplers
 }
 

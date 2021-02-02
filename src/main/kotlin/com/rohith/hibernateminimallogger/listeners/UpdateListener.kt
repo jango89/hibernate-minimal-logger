@@ -13,7 +13,7 @@ class UpdateListener(private val noOfUpdationSamplesPerEntity: Int) : PostUpdate
 
     override fun onPostUpdate(event: PostUpdateEvent?) {
         event?.session?.getEntityName(event?.entity)?.let {
-            SampleUpdater.upsert(
+            SampleUpdater.update(
                     it,
                     noOfUpdationSamplesPerEntity,
                     Scenario.FINISH,

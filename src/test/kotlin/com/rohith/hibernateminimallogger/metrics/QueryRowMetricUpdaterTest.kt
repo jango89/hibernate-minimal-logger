@@ -4,7 +4,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.concurrent.Executors
 import java.util.concurrent.ThreadPoolExecutor
-import kotlin.random.Random
+import java.util.stream.Collectors
+import java.util.stream.IntStream
 
 class QueryRowMetricUpdaterTest {
 
@@ -17,18 +18,16 @@ class QueryRowMetricUpdaterTest {
     @Test
     fun shouldUpdateRow_WithHighestTimeTaken_whenMultipleThreadsTryToUpdate() {
 
-        val service: ThreadPoolExecutor = Executors.newFixedThreadPool(10) as ThreadPoolExecutor
+        val service: ThreadPoolExecutor = Executors.newFixedThreadPool(50) as ThreadPoolExecutor
 
-        val randomList = arrayListOf<Int>()
+        val randomList = IntStream.range(1000, 1050)
+                .boxed()
+                .collect(Collectors.toList())
 
-        for (i in 0 until 10) {
-            service.submit {
-                val intVal = Random.nextInt(1000, 1010)
-                randomList.add(intVal)
-                QueryRowMetricUpdater.addToMetric("second_query_row_update", intVal)
-            }
+        randomList.map {
+            service.submit { QueryRowMetricUpdater.addToMetric("second_query_row_update", it) }
         }
-        Thread.sleep(1000)
+        Thread.sleep(2000)
 
         assertEquals(randomList.maxOrNull(), MetricHolder.queryWithRows["second_query_row_update"])
     }

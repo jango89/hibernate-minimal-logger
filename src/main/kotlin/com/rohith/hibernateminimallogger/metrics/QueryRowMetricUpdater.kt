@@ -7,11 +7,11 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.locks.ReentrantReadWriteLock
 
 private val LOGGER: Logger = LoggerFactory.getLogger(QueryRowMetricUpdater::class.java)
-private const val LOCK_IN_MS: Long = 5
+private const val LOCK_IN_MS: Long = 10
 
 object QueryRowMetricUpdater {
 
-    private val lockForQueryRows = ReentrantReadWriteLock()
+    private val lockForQueryRows = ReentrantReadWriteLock(true)
 
     fun addToMetric(sql: String, rows: Int) {
 
