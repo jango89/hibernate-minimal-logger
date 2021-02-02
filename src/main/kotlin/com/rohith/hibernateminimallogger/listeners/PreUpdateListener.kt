@@ -9,7 +9,7 @@ import org.hibernate.event.spi.PreUpdateEventListener
 class PreUpdateListener(private val noOfUpdationSamplesPerEntity: Int) : PreUpdateEventListener {
 
     override fun onPreUpdate(event: PreUpdateEvent?): Boolean {
-        event?.session?.getEntityName(event?.entity)?.let {
+        event?.entity?.javaClass?.name?.let {
             SampleUpdater.update(
                     it,
                     noOfUpdationSamplesPerEntity,
@@ -18,7 +18,7 @@ class PreUpdateListener(private val noOfUpdationSamplesPerEntity: Int) : PreUpda
             )
         }
 
-        return true
+        return false
     }
 
 }

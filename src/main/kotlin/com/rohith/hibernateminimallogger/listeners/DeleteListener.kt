@@ -12,7 +12,7 @@ internal class DeleteListener(private val noOfDeletionSamplesPerEntity: Int) : P
     override fun requiresPostCommitHanding(persister: EntityPersister?): Boolean = false
 
     override fun onPostDelete(event: PostDeleteEvent?) {
-        event?.session?.getEntityName(event?.entity)?.let {
+        event?.entity?.javaClass?.name?.let {
             SampleUpdater.delete(
                     it,
                     noOfDeletionSamplesPerEntity,

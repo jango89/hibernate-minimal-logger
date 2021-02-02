@@ -12,7 +12,7 @@ class UpdateListener(private val noOfUpdationSamplesPerEntity: Int) : PostUpdate
     override fun requiresPostCommitHanding(persister: EntityPersister?): Boolean = false
 
     override fun onPostUpdate(event: PostUpdateEvent?) {
-        event?.session?.getEntityName(event?.entity)?.let {
+        event?.entity?.javaClass?.name?.let {
             SampleUpdater.update(
                     it,
                     noOfUpdationSamplesPerEntity,

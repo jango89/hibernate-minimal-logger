@@ -39,6 +39,8 @@ internal object SampleUpdater {
             if (writeLock.tryLock(LOCK_IN_MS, TimeUnit.MILLISECONDS)) {
                 addToMetric(entityName, maxNoOfSamplers, scenario, transactionEvent)
             }
+        } catch (ex: Exception) {
+            LOGGER.warn("Transaction metric cannot be recorded", ex)
         } finally {
             writeLock.unlock()
         }
@@ -63,8 +65,8 @@ internal object SampleUpdater {
 
     private fun updateTime(scenario: Scenario, timeStats: MetricHolder.TimeStats) =
             when (scenario) {
-                START -> timeStats?.start = currentTimeMillis()
-                FINISH -> timeStats?.finish = currentTimeMillis()
+                START -> timeStats.start = currentTimeMillis()
+                FINISH -> timeStats.finish = currentTimeMillis()
             }
 
     private fun canAdd(samples: WeakHashMap<Long, MetricHolder.TimeStats>, maxNoOfSamplers: Int) =

@@ -9,7 +9,7 @@ import org.hibernate.event.spi.PreInsertEventListener
 class PreInsertListener(private val noOfCreationSamplesPerEntity: Int) : PreInsertEventListener {
 
     override fun onPreInsert(event: PreInsertEvent?): Boolean {
-        event?.session?.getEntityName(event?.entity)?.let {
+        event?.entity?.javaClass?.name?.let {
             SampleUpdater.insert(
                     it,
                     noOfCreationSamplesPerEntity,
@@ -17,6 +17,6 @@ class PreInsertListener(private val noOfCreationSamplesPerEntity: Int) : PreInse
                     TransactionEvent.INSERT
             )
         }
-        return true
+        return false
     }
 }

@@ -11,7 +11,7 @@ class InsertListener(private val noOfCreationSamplesPerEntity: Int) : PostInsert
     override fun requiresPostCommitHanding(persister: EntityPersister?): Boolean = false
 
     override fun onPostInsert(event: PostInsertEvent?) {
-        event?.session?.getEntityName(event?.entity)?.let {
+        event?.entity?.javaClass?.name?.let {
             SampleUpdater.insert(
                     it,
                     noOfCreationSamplesPerEntity,

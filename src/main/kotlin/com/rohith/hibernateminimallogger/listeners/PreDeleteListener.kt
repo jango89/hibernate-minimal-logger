@@ -9,7 +9,7 @@ import org.hibernate.event.spi.PreDeleteEventListener
 internal class PreDeleteListener(private val noOfDeletionSamplesPerEntity: Int) : PreDeleteEventListener {
 
     override fun onPreDelete(event: PreDeleteEvent?): Boolean {
-        event?.session?.getEntityName(event?.entity)?.let {
+        event?.entity?.javaClass?.name?.let {
             SampleUpdater.delete(
                     it,
                     noOfDeletionSamplesPerEntity,
@@ -17,7 +17,7 @@ internal class PreDeleteListener(private val noOfDeletionSamplesPerEntity: Int) 
                     TransactionEvent.DELETE
             )
         }
-        return true
+        return false
     }
 
 }
