@@ -10,7 +10,7 @@ import org.hibernate.integrator.spi.Integrator
 import org.hibernate.jpa.boot.spi.IntegratorProvider
 import org.hibernate.service.spi.SessionFactoryServiceRegistry
 
-internal class ListenerIntegrator(private val props: Map<String, Any>) : IntegratorProvider {
+class ListenerIntegrator(private val props: Map<String, Any>) : IntegratorProvider {
 
     override fun getIntegrators(): MutableList<Integrator> {
         return mutableListOf(TransactionalIntegrator(props))

@@ -24,6 +24,8 @@ Default implementation from hibernate is costly and it does a lot of things and 
 
 Dependency available [here](https://mvnrepository.com/artifact/com.github.jango89/hibernate-minimal-logger)
 
+#### Non-Transactional Statistics
+
 Configurable Properties.
 1. "min.hibernate.stats.logging.enabled" - True/False (Enable logging)
 2. "min.hibernate.stats.metrics.publish" - True/False (Enable storing in-memory and enabling it to be available via MetricsPublisher class)
@@ -31,16 +33,38 @@ Configurable Properties.
 4. "min.hibernate.stats.query.logging.min.executionTime.millis" - 250 (Minimum Milliseconds needed to report the metric).
 5. "min.hibernate.stats.query.logging.min.rows" - 20 (Minimum number of rows fetched to report the metric).
 
-
-
-### In Hibernate
+###### In Hibernate
 
 This property helps to instantiate our library.
 "hibernate.stats.factory", new MinimalStatisticsFactory());
 
-### Without hibernate
+###### Without hibernate
 
 Instantiate this "new MinimalStatisticsFactory()" and makes use of Classes in "com.rohith.hibernateminimallogger.loggers" package.
+
+#### Transactional Statistics
+
+Time taken for INSERTS, DELETES and UPDATES could also be recorded.
+
+Configurable Properties.
+
+1. "min.hibernate.stats.logging.updates.enabled" - Update listener is enabled, so time taken for updates are recorded.
+3. "min.hibernate.stats.logging.deletes.enabled" - Delete listener is enabled, so time taken for deletes are recorded.
+5. "min.hibernate.stats.logging.inserts.enabled" - Insert listener is enabled, so time taken for inserts are recorded.
+
+"min.hibernate.stats.logging.updates.samples"
+"min.hibernate.stats.logging.inserts.samples"
+"min.hibernate.stats.logging.deletes.samples"
+
+=> Limit how many samples could be collected to compare instead of recording every transaction and wasting the resources. 
+
+This will then run comparisons on those collected samples based on each thread id.
+
+However of-course once the metric is reported to prometheus via MetricPublisher, the collected data is cleared and again recorded.
+
+###### In Hibernate
+
+
 
 ## Report to graph database or Prometheus
 
