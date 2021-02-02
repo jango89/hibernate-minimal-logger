@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.github.jango89</groupId>
     <artifactId>hibernate-minimal-logger</artifactId>
-    <version>0.0.7</version>
+    <version>0.0.8-SNAPSHOT</version>
     <name>hibernate-minimal-logger</name>
     <description>Hibernate Minimal Logger</description>
     <properties>
@@ -28,7 +28,7 @@
         <connection>scm:git:git://github.com/jango89/hibernate-minimal-logger.git</connection>
         <developerConnection>scm:git:git@github.com:jango89/hibernate-minimal-logger.git</developerConnection>
         <url>https://github.com/jango89/hibernate-minimal-logger</url>
-        <tag>hibernate-minimal-logger-0.0.7</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
