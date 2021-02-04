@@ -23,9 +23,9 @@ Default implementation from hibernate is costly and it does a lot of things and 
 
 ## Configurables
 
-1. Only report to prometheus or log if the query takes more than 1 sec.
-2. Only report to prometheus or log if the number of rows fetched is more than 100.
-3. Only report to prometheus or log if the Transactions are taking more than 2 sec.
+1. Only report to prometheus or log if the query takes more than 1 sec (Can avoid Thread pool starvations).
+2. Only report to prometheus or log if the number of rows fetched is more than 100 (Can avoid wasting resources for in-memory loading).
+3. Only report to prometheus or log if the Transactions are taking more than 2 sec (Possiblity to double check indexes being updated/created are needed or not).
 
 ## Usage
 
