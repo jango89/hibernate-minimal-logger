@@ -75,7 +75,7 @@ This property helps to instantiate our library.
 
 ## Known Pitfalls
 
-Latest hibernate versions may need changes in this (file)[https://github.com/jango89/hibernate-minimal-logger/blob/main/src/main/kotlin/com/rohith/hibernateminimallogger/hibernateenablers/StatisticsIntegrator.kt]. Since it implements the hibernate provided Interface.
+1. Latest hibernate versions may need changes in this [file](https://github.com/jango89/hibernate-minimal-logger/blob/main/src/main/kotlin/com/rohith/hibernateminimallogger/hibernateenablers/StatisticsIntegrator.kt). Since it implements the hibernate provided Interface.
 
 
 ## Integration Docs
