@@ -21,6 +21,12 @@ Default implementation from hibernate is costly and it does a lot of things and 
 2. Developer need alert from Prometheus if there are queries taking more time than expected.
 3. Developer needs prometheus metrics on how many rows being fetched for select queries.
 
+## Configurables
+
+1. Only report to prometheus or log if the query takes more than 1 sec.
+2. Only report to prometheus or log if the number of rows fetched is more than 100.
+3. Only report to prometheus or log if the Transactions are taking more than 2 sec.
+
 ## Usage
 
 Dependency available [here](https://mvnrepository.com/artifact/com.github.jango89/hibernate-minimal-logger)
