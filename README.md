@@ -76,8 +76,9 @@ This property helps to instantiate our library.
 
 ## Report to graph database or Prometheus
 
-1. Enable saving data by enabling "min.hibernate.stats.metrics.publish" property via system property.
-2. And scrape information from [methods here](https://github.com/jango89/hibernate-minimal-logger/blob/main/src/main/kotlin/com/rohith/hibernateminimallogger/metrics/MetricPublisher.kt) based on necessity.
+1. Enable saving non-transactional queries related stats by enabling "min.hibernate.stats.metrics.publish" property.
+2. Enable saving transactional queries related stats by enabling "min.hibernate.stats.logging.*" properties.
+3. And finally, scrape information from [methods here](https://github.com/jango89/hibernate-minimal-logger/blob/main/src/main/kotlin/com/rohith/hibernateminimallogger/metrics/MetricPublisher.kt) based on necessity.
 
 ## Known Pitfalls
 
