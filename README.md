@@ -61,7 +61,7 @@ Configurable Properties.
 
 This will then run comparisons on those collected samples based on each thread id.
 
-However of-course once the metric is reported to prometheus via MetricPublisher, the collected data is cleared and again recorded.
+However, once the metric is reported to prometheus via MetricPublisher, the collected data is cleared and starts collecting samples again.
 
 ###### In Hibernate
 
