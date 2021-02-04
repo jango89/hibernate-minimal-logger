@@ -9,10 +9,11 @@ Default implementation from hibernate is costly and it does a lot of things and 
 
 1. This library helps us to activate only the loggers based on things each individual or team wants.
 2. Enable or disable logging of Statistics type.
-3. Enable or disable storing and reporting of Statistics.
+3. Enable or disable storing and reporting of Statistics via Prometheus or similar time series database.
 4. Easy customizations using system properties.
 5. Injectable even on non-hibernate or non-spring projects by little tweaks.
-6. Statistics reporting will help the data to be sent to Prometheus or similar databases and create alerts to notify whether there are queries that needs to be improved.
+6. Create alerts to notify about queries that needs to be improved.
+7. Manually looking at the Database Reports on long running queries or running "Explain" command in the database. 
 
 ## Sample Use-cases
 
