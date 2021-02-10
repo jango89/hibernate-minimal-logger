@@ -5,9 +5,14 @@ Library to enable minimal statistical recording of database queries.
 ## Motivation
 
 Currently, it is impossible to *only* log or record the query and the time taken to execute them. 
-Default implementation from hibernate is costly and it does a lot of things and not even sure how performant is this in a production system.
+Default implementation from hibernate is costly in terms of,
+1. Does a lot of things without asking what all users need.
+2. Store a lot of data in the heap, some of them are even strong references.
+3. Tightly coupled and not possible to extend.
+4. Usage of Hibernate-sessions can be seene everywhere.
 
-1. This library helps us to activate only the metrics which are needed and not everything.
+Instead this library,
+1. Helps us to activate only the metrics which are needed and not everything.
 2. Enable or disable logging of Statistics type.
 3. Enable or disable storing and reporting of Statistics via Prometheus or similar time series database.
 4. Easy customizations using system properties.
