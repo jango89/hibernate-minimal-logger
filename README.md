@@ -20,7 +20,7 @@ Default implementation from hibernate is costly and it does a lot of things and 
 1. Log sql queries with time taken to execute.
 2. Prometheus alerts for queries taking more time than expected.
 3. Prometheus alerts for rows being fetched for select queries.
-4. Record querys only if it takes time more than expected. Eg: Log queryies if they execution time is more than 250ms.
+4. Record querys only if it takes time more than expected. Eg: Log queries if the execution time is more than 250ms.
 5. Record insert, update and delete operations of entities if commit time is taking more than 250ms. 
 
 ## Configurables
