@@ -11,8 +11,8 @@ Default implementation from hibernate is costly in terms of,
 3. Tightly coupled and not possible to extend.
 4. Usage of Hibernate-sessions can be seen everywhere.
 
-Instead this library,
-1. Helps us to activate only the metrics which are needed.
+Instead this library helps us to achieve,
+1. Activate only the metrics which are needed.
 2. Enable or disable logging of Statistics type (query time, row fetch count).
 3. Enable or disable storing and reporting of Statistics via Prometheus or similar time series database.
 4. Easy customizations using system properties.
