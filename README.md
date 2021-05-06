@@ -6,7 +6,7 @@ Library to enable minimal statistical recording of database queries.
 
 Currently, it is impossible to *only* log or record the query and the time taken to execute them. 
 Default implementation from hibernate is costly in terms of,
-1. Does a lot of things without asking what all users need.
+1. Does a lot of things without asking what does the user need.
 2. Store a lot of data in the heap, some of them are even strong references.
 3. Tightly coupled and not possible to extend.
 4. Usage of Hibernate-sessions can be seen everywhere.
